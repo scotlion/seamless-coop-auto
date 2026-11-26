@@ -7,9 +7,120 @@
 
 $ErrorActionPreference = "Stop"
 
+# ============================================================
 # CONFIGURACOES
+# ============================================================
+
 $Repo = "yuiamoroll/EldenRingSeamlessCoopRelease"
 $ApiUrl = "https://api.github.com/repos/$Repo/releases/latest"
+
+# Repositorio do atualizador e configurador
+$UpdaterRepo = "scotlion/seamless-coop-auto"
+
+$ConfiguratorUrl = "https://raw.githubusercontent.com/$UpdaterRepo/main/Configurador-SeamlessCoop.html"
+
+# ============================================================
+# FUNCAO: INSTALAR CONFIGURADOR
+# ============================================================
+
+function Install-SeamlessConfigurator {
+
+    $ConfigDir = Join-Path $env:LOCALAPPDATA "SeamlessCoopUpdater\Configurator"
+
+    $ConfigPath = Join-Path $ConfigDir "Configurador-SeamlessCoop.html"
+
+    $TempConfig = "$ConfigPath.download"
+
+    Write-Host ""
+    Write-Host "============================================" -ForegroundColor Cyan
+    Write-Host "       INSTALANDO CONFIGURADOR" -ForegroundColor Cyan
+    Write-Host "============================================" -ForegroundColor Cyan
+
+    try {
+
+        New-Item -ItemType Directory -Path $ConfigDir -Force | Out-Null
+
+        Write-Host "Baixando configurador do GitHub..." -ForegroundColor Yellow
+
+        $ConfigHeaders = @{
+            "User-Agent" = "SeamlessCoopUpdater-PowerShell"
+        }
+
+        Invoke-WebRequest `
+            -Uri $ConfiguratorUrl `
+            -OutFile $TempConfig `
+            -Headers $ConfigHeaders `
+            -UseBasicParsing
+
+        if (!(Test-Path -LiteralPath $TempConfig -PathType Leaf)) {
+            throw "Arquivo do configurador nao foi baixado."
+        }
+
+        $ConfigInfo = Get-Item -LiteralPath $TempConfig
+
+        if ($ConfigInfo.Length -lt 1000) {
+            throw "Arquivo do configurador parece estar incompleto."
+        }
+
+        # Substituir configurador anterior
+        Move-Item `
+            -LiteralPath $TempConfig `
+            -Destination $ConfigPath `
+            -Force
+
+        Write-Host "[OK] Configurador baixado!" -ForegroundColor Green
+
+        # ====================================================
+        # CRIAR ATALHO NA AREA DE TRABALHO
+        # ====================================================
+
+        try {
+
+            $Desktop = [Environment]::GetFolderPath("Desktop")
+
+            if ([string]::IsNullOrWhiteSpace($Desktop)) {
+                throw "Nao foi possivel localizar a Area de Trabalho."
+            }
+
+            $ShortcutPath = Join-Path $Desktop "Seamless Co-op Configurador.lnk"
+
+            $WshShell = New-Object -ComObject WScript.Shell
+
+            $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+
+            $Shortcut.TargetPath = $ConfigPath
+            $Shortcut.WorkingDirectory = $ConfigDir
+            $Shortcut.Description = "Configurador do Elden Ring Seamless Co-op"
+
+            $Shortcut.Save()
+
+            Write-Host "[OK] Atalho criado na Area de Trabalho!" -ForegroundColor Green
+
+        }
+        catch {
+
+            Write-Host "[AVISO] Nao foi possivel criar o atalho." -ForegroundColor Yellow
+            Write-Host $_.Exception.Message
+        }
+
+        Write-Host ""
+        Write-Host "Configurador instalado em:"
+        Write-Host $ConfigPath
+
+    }
+    catch {
+
+        Write-Host ""
+        Write-Host "[AVISO] Nao foi possivel atualizar o configurador." -ForegroundColor Yellow
+        Write-Host $_.Exception.Message
+
+        Write-Host "A instalacao do Seamless Co-op continuara normalmente."
+
+        if (Test-Path -LiteralPath $TempConfig) {
+            Remove-Item -LiteralPath $TempConfig -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
 
 # ============================================================
 # INICIO
@@ -39,7 +150,7 @@ if (!(Test-Path -LiteralPath $GameExe -PathType Leaf)) {
     Write-Host "Execute o script na pasta que contem eldenring.exe."
 
     Read-Host "Pressione ENTER para sair"
-    exit 1
+    return
 }
 
 Write-Host "[OK] Elden Ring detectado!" -ForegroundColor Green
@@ -84,7 +195,7 @@ catch {
     Write-Host $_.Exception.Message
 
     Read-Host "Pressione ENTER para sair"
-    exit 1
+    return
 }
 
 # ============================================================
@@ -123,7 +234,7 @@ catch {
     Write-Host $_.Exception.Message
 
     Read-Host "Pressione ENTER para sair"
-    exit 1
+    return
 }
 
 # ============================================================
@@ -174,7 +285,7 @@ catch {
     Write-Host $_.Exception.Message
 
     Read-Host "Pressione ENTER para sair"
-    exit 1
+    return
 }
 
 # ============================================================
@@ -236,7 +347,7 @@ catch {
     Write-Host $_.Exception.Message
 
     Read-Host "Pressione ENTER para sair"
-    exit 1
+    return
 }
 
 # ============================================================
@@ -281,7 +392,7 @@ if ($Answer -notmatch '^(S|s|SIM|sim)$') {
     Write-Host $ExtractDir
 
     Read-Host "Pressione ENTER para sair"
-    exit 0
+    return
 }
 
 # ============================================================
@@ -372,15 +483,28 @@ try {
         throw "ersc.dll nao encontrado apos instalacao."
     }
 
-    # Limpar arquivos temporarios apos instalacao
-Write-Host ""
-Write-Host "Limpando arquivos temporarios..." -ForegroundColor Yellow
+    # ========================================================
+    # 10. INSTALAR CONFIGURADOR
+    # ========================================================
 
-if (Test-Path -LiteralPath $VersionDir) {
-    Remove-Item -LiteralPath $VersionDir -Recurse -Force
-}
+    Install-SeamlessConfigurator
 
-Write-Host "[OK] Arquivos temporarios removidos!" -ForegroundColor Green
+    # ========================================================
+    # 11. LIMPAR ARQUIVOS TEMPORARIOS
+    # ========================================================
+
+    Write-Host ""
+    Write-Host "Limpando arquivos temporarios..." -ForegroundColor Yellow
+
+    if (Test-Path -LiteralPath $VersionDir) {
+        Remove-Item -LiteralPath $VersionDir -Recurse -Force
+    }
+
+    Write-Host "[OK] Arquivos temporarios removidos!" -ForegroundColor Green
+
+    # ========================================================
+    # 12. CONCLUSAO
+    # ========================================================
 
     Write-Host ""
     Write-Host "============================================" -ForegroundColor Green
