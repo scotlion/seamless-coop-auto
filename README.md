@@ -90,9 +90,51 @@ Após uma instalação bem-sucedida, os arquivos temporários daquela versão s�
 - Invoke-WebRequest
 - Expand-Archive
 
-## 🔗 Projeto original
 
-O atualizador utiliza as Releases disponibilizadas em:
+⚙️ Configurador do Seamless Co-op
+
+O projeto disponibiliza um configurador para editar o arquivo ersc_settings.ini, permitindo modificar as configurações do Seamless Co-op, incluindo a senha da sessão.
+
+📂 Localização do configurador
+
+O configurador é baixado automaticamente para:
+
+C:\Users\usuario\AppData\Local\SeamlessCoopUpdater\Configurator\
+
+Após o download, um atalho é criado automaticamente na Área de Trabalho. Basta abrir o configurador pelo atalho.
+
+⚠️ Restrição ao selecionar o arquivo de configuração
+
+O configurador apresenta uma limitação ao tentar selecionar o arquivo ersc_settings.ini quando ele está localizado em pastas protegidas do Windows, como:
+
+C:\Program Files\
+C:\Program Files (x86)\
+
+Nessas situações, não é possível selecionar e modificar o arquivo diretamente pelo configurador.
+
+Como contornar essa limitação:
+
+Acesse a pasta SeamlessCoop do jogo.
+
+Copie o arquivo ersc_settings.ini.
+
+Cole o arquivo em uma pasta fora dos diretórios protegidos, como a Área de Trabalho.
+
+Abra o configurador pelo atalho.
+
+Selecione o arquivo copiado e faça as alterações desejadas.
+
+Salve as configurações.
+
+Copie o arquivo atualizado de volta para a pasta SeamlessCoop do jogo, substituindo o anterior.
+
+Importante: essa limitação ocorre devido às restrições de acesso do navegador a arquivos localizados em diretórios protegidos do Windows. Não é necessário mover o jogo ou reinstalar o mod.
+
+
+
+## 🔗 Observações
+
+O atualizador utiliza/baixa as Releases disponibilizadas em:
 
 https://github.com/yuiamoroll/EldenRingSeamlessCoopRelease
 
