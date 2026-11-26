@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seamless Co-op | Configurador</title>
+<style>
+:root{--bg:#101114;--panel:#191b20;--panel2:#20232a;--line:#343943;--text:#eee9dc;--muted:#a6a397;--gold:#c9a85b;--gold2:#e2c77f;--green:#79bd8a;--red:#df7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#29251b 0,#141519 42%,#0e0f12 100%);color:var(--text);font:15px/1.5 Segoe UI,Arial,sans-serif;min-height:100vh;padding:32px 16px}
+.container{max-width:940px;margin:auto}.hero{text-align:center;margin:10px 0 28px}.sigil{font-size:30px;color:var(--gold);letter-spacing:9px}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase}.hero h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);font-weight:500;margin:8px 0}.hero p{color:var(--muted);margin:0}
+.status{display:flex;align-items:center;gap:10px;background:#191b20;border:1px solid var(--line);border-radius:10px;padding:13px 16px;margin-bottom:18px;color:var(--muted);overflow-wrap:anywhere}.dot{width:9px;height:9px;border-radius:50%;background:#777;flex:none}.status.ok .dot{background:var(--green);box-shadow:0 0 10px #79bd8a66}.status.error .dot{background:var(--red)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}.btn{border:1px solid var(--gold);background:var(--gold);color:#171511;padding:11px 17px;border-radius:7px;font-weight:700;cursor:pointer;transition:.15s}.btn:hover{background:var(--gold2)}.btn.secondary{background:transparent;color:var(--gold2)}.btn.secondary:hover{background:#c9a85b18}.btn:disabled{opacity:.4;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:linear-gradient(145deg,#1d2026,#17191e);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}.panel.wide{grid-column:1/-1}.panel h2{font:20px Georgia,serif;color:var(--gold2);margin:0 0 5px}.desc{color:var(--muted);font-size:13px;margin:0 0 17px}.field{padding:12px 0;border-top:1px solid #ffffff0d}.field:first-of-type{border-top:0}.field label{display:block;font-weight:600;margin-bottom:5px}.hint{display:block;color:var(--muted);font-size:12px;margin-top:4px}.control{width:100%;background:#111318;color:var(--text);border:1px solid #414650;border-radius:6px;padding:10px 11px;font:inherit;outline:none}.control:focus{border-color:var(--gold)}select.control{cursor:pointer}.inline{display:flex;align-items:center;gap:10px}.inline .control{max-width:150px}.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px}.toggle input{width:19px;height:19px;accent-color:var(--gold);cursor:pointer}.password-wrap{display:flex;gap:8px}.password-wrap .control{flex:1;min-width:0}.password-wrap button{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:0 12px;cursor:pointer}.footer{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-top:20px}.note{color:var(--muted);font-size:12px;max-width:570px}.message{min-height:22px;color:var(--green);font-size:13px;margin-top:12px}.message.error{color:var(--red)}.footer-brand{text-align:center;color:#77756e;font-size:11px;letter-spacing:2px;margin-top:28px}
+@media(max-width:680px){body{padding:20px 12px}.grid{grid-template-columns:1fr}.panel.wide{grid-column:auto}.panel{padding:16px}.toolbar .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="hero"><div class="sigil">✦ ✧ ✦</div><div class="eyebrow">Elden Ring · Seamless Co-op</div><h1>Configurador</h1><p>Personalize sua experiência cooperativa nas Terras Intermédias.</p></header>
+<div id="status" class="status"><span class="dot"></span><span id="statusText">Nenhum arquivo carregado. Selecione diretamente o arquivo ersc_settings.ini.</span></div>
+<div class="toolbar"><button class="btn" id="locateBtn">⌕ Selecionar arquivo INI</button><button class="btn secondary" id="reloadBtn" disabled>Recarregar arquivo</button></div>
+<div class="grid">
+<section class="panel"><h2>Jogabilidade</h2><p class="desc">Ative ou desative recursos da sessão cooperativa.</p>
+<div class="field toggle"><div><label for="allow_invaders">Permitir invasores</label><span class="hint">Permite que outros jogadores invadam sua sessão.</span></div><input type="checkbox" id="allow_invaders"></div>
+<div class="field toggle"><div><label for="death_debuffs">Penalidade ao morrer</label><span class="hint">Aplica Rot Essence até descansar em uma graça.</span></div><input type="checkbox" id="death_debuffs"></div>
+<div class="field toggle"><div><label for="allow_summons">Permitir invocações espirituais</label><span class="hint">Permite usar Spirit Ashes.</span></div><input type="checkbox" id="allow_summons"></div>
+<div class="field"><label for="overhead_player_display">Informações sobre os jogadores</label><select class="control" id="overhead_player_display"><option value="0">0 — Exibição normal</option><option value="1">1 — Nenhuma</option><option value="2">2 — Ping</option><option value="3">3 — Nível do personagem</option><option value="4">4 — Número de mortes</option><option value="5">5 — Nível + ping</option></select></div>
+<div class="field toggle"><div><label for="skip_splash_screens">Pular telas de abertura</label><span class="hint">Ignora os logotipos iniciais.</span></div><input type="checkbox" id="skip_splash_screens"></div>
+<div class="field toggle"><div><label for="append_steam_id_to_players">Mostrar Steam ID</label><span class="hint">Acrescenta o Steam ID ao nome dos jogadores.</span></div><input type="checkbox" id="append_steam_id_to_players"></div>
+<div class="field"><label for="always_spectate_on_death">Espectador após morrer</label><select class="control" id="always_spectate_on_death"><option value="0">0 — Apenas em chefes/invasões</option><option value="1">1 — Sempre, até wipeout ou graça</option></select></div>
+<div class="field"><label for="default_boot_master_volume">Volume inicial do jogo: <strong id="volumeValue">5</strong>/10</label><input class="control" type="range" min="0" max="10" step="1" id="default_boot_master_volume"></div>
+</section>
+<section class="panel"><h2>Escalonamento</h2><p class="desc">Ajuste o aumento de atributos dos inimigos por jogador adicional.</p>
+<div class="field"><label for="enemy_health_scaling">Vida dos inimigos (%)</label><input class="control" type="number" min="0" max="999" id="enemy_health_scaling"><span class="hint">Aumento percentual por jogador adicional.</span></div>
+<div class="field"><label for="enemy_damage_scaling">Dano dos inimigos (%)</label><input class="control" type="number" min="0" max="999" id="enemy_damage_scaling"></div>
+<div class="field"><label for="enemy_posture_scaling">Postura dos inimigos (%)</label><input class="control" type="number" min="0" max="999" id="enemy_posture_scaling"></div>
+<div class="field"><label for="boss_health_scaling">Vida dos chefes (%)</label><input class="control" type="number" min="0" max="999" id="boss_health_scaling"></div>
+<div class="field"><label for="boss_damage_scaling">Dano dos chefes (%)</label><input class="control" type="number" min="0" max="999" id="boss_damage_scaling"></div>
+<div class="field"><label for="boss_posture_scaling">Postura dos chefes (%)</label><input class="control" type="number" min="0" max="999" id="boss_posture_scaling"></div>
+</section>
+<section class="panel wide"><h2>Sessão cooperativa</h2><p class="desc">Defina a senha que os outros jogadores usarão para entrar na sua sessão.</p>
+<div class="field"><label for="cooppassword">Senha da sessão</label><div class="password-wrap"><input class="control" type="password" id="cooppassword" maxlength="120" placeholder="Digite sua senha"><button type="button" id="showPassword">Mostrar</button></div><span class="hint">Compartilhe a senha somente com quem deseja jogar.</span></div>
+</section>
+<section class="panel"><h2>Arquivo de salvamento</h2><p class="desc">Personalize a extensão utilizada nos arquivos de salvamento do mod.</p><div class="field"><label for="save_file_extension">Extensão</label><input class="control" id="save_file_extension" maxlength="120" pattern="[A-Za-z0-9]+"><span class="hint">Somente letras e números. Padrão: co2.</span></div></section>
+<section class="panel"><h2>Idioma</h2><p class="desc">Escolha um idioma ou deixe automático para usar o idioma do jogo.</p><div class="field"><label for="mod_language_override">Idioma do mod</label><select class="control" id="mod_language_override">
+<option value="">Automático — usar idioma do jogo</option>
+<option value="arabic">العربية — Árabe</option>
+<option value="brazilian">Português (Brasil)</option>
+<option value="portuguese">Português (Portugal)</option>
+<option value="french">Français — Francês</option>
+<option value="german">Deutsch — Alemão</option>
+<option value="hungarian">Magyar — Húngaro</option>
+<option value="italian">Italiano</option>
+<option value="japanese">日本語 — Japonês</option>
+<option value="koreana">한국어 — Coreano</option>
+<option value="latam">Español (América Latina)</option>
+<option value="polish">Polski — Polonês</option>
+<option value="russian">Русский — Russo</option>
+<option value="schinese">简体中文 — Chinês simplificado</option>
+<option value="spanish">Español (Espanha)</option>
+<option value="tchinese">繁體中文 — Chinês tradicional</option>
+<option value="thai">ไทย — Tailandês</option>
+<option value="turkish">Türkçe — Turco</option>
+<option value="vietnamese">Tiếng Việt — Vietnamita</option>
+</select><span class="hint">O idioma escolhido precisa ter o arquivo correspondente (.json) na pasta SeamlessCoop\locale. Automático deixa o valor vazio no INI.</span></div></section>
+</div>
+<div class="footer"><div class="note">Selecione diretamente <b>ersc_settings.ini</b> dentro da pasta SeamlessCoop. As alterações serão gravadas nesse arquivo, preservando as demais linhas e comentários.</div><button class="btn" id="saveBtn" disabled>Salvar configurações</button></div>
+<div id="message" class="message" role="status"></div><div class="footer-brand">SEAMLESS CO-OP CONFIGURATOR</div>
+</div>
+<script>
+(() => {
+ const $ = id => document.getElementById(id);
+ const keys = ['allow_invaders','death_debuffs','allow_summons','overhead_player_display','skip_splash_screens','append_steam_id_to_players','always_spectate_on_death','default_boot_master_volume','enemy_health_scaling','enemy_damage_scaling','enemy_posture_scaling','boss_health_scaling','boss_damage_scaling','boss_posture_scaling','cooppassword','save_file_extension','mod_language_override'];
+ let fileHandle = null;
+ const DB_NAME = 'SeamlessCoopConfigurator';
+ const STORE_NAME = 'settings';
+ const HANDLE_KEY = 'ersc_settings_ini_handle';
+ function openHandleDB(){
+  return new Promise((resolve,reject)=>{
+   const request=indexedDB.open(DB_NAME,1);
+   request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(STORE_NAME))request.result.createObjectStore(STORE_NAME);};
+   request.onsuccess=()=>resolve(request.result);
+   request.onerror=()=>reject(request.error);
+  });
+ }
+ async function rememberHandle(handle){
+  const db=await openHandleDB();
+  await new Promise((resolve,reject)=>{const tx=db.transaction(STORE_NAME,'readwrite');tx.objectStore(STORE_NAME).put(handle,HANDLE_KEY);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+  db.close();
+ }
+ async function getRememberedHandle(){
+  const db=await openHandleDB();
+  const handle=await new Promise((resolve,reject)=>{const tx=db.transaction(STORE_NAME,'readonly');const request=tx.objectStore(STORE_NAME).get(HANDLE_KEY);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error);});
+  db.close();
+  return handle;
+ }
+ const status = (message, type='') => { $('statusText').textContent=message; $('status').className='status '+type; };
+ const msg = (message, error=false) => { $('message').textContent=message; $('message').className='message'+(error?' error':''); };
+ function parseIni(text){ const values={}; for(const line of text.split(/\r?\n/)){ const m=line.match(/^\s*([A-Za-z0-9_]+)\s*=\s*(.*?)\s*$/); if(m) values[m[1]]=m[2]; } return values; }
+ function populate(values){ for(const key of keys){ const el=$(key); if(!el) continue; const value=values[key] ?? ''; if(el.type==='checkbox') el.checked=value==='1'||value.toLowerCase()==='true'; else if(key==='mod_language_override' && value && !Array.from(el.options).some(option=>option.value===value)){ const custom=document.createElement('option'); custom.value=value; custom.textContent=value+' — idioma personalizado (já estava no INI)'; el.appendChild(custom); el.value=value; } else el.value=value; } $('volumeValue').textContent=$('default_boot_master_volume').value||'0'; }
+ async function load(){ if(!fileHandle) return; const file=await fileHandle.getFile(); const text=await file.text(); populate(parseIni(text)); $('saveBtn').disabled=false; $('reloadBtn').disabled=false; status('Arquivo carregado: '+fileHandle.name,'ok'); msg('Configurações carregadas.'); }
+ $('locateBtn').addEventListener('click',async()=>{
+  msg('');
+  if(!window.showOpenFilePicker){
+   status('Este navegador não oferece seleção de arquivos com gravação direta. Use uma versão atualizada do Google Chrome ou Microsoft Edge.','error');
+   msg('Abra o configurador no Chrome ou Edge atualizado e tente novamente.',true);
+   return;
+  }
+  try{
+   const [handle]=await window.showOpenFilePicker({
+    multiple:false,
+    excludeAcceptAllOption:true,
+    types:[{description:'Arquivo de configuração Seamless Co-op',accept:{'text/plain':['.ini']}}]
+   });
+   if(handle.name.toLowerCase()!=='ersc_settings.ini'){
+    throw new Error('O arquivo selecionado foi "'+handle.name+'". Selecione exatamente ersc_settings.ini dentro da pasta SeamlessCoop.');
+   }
+   fileHandle=handle;
+   await rememberHandle(handle);
+   await load();
+   status('Arquivo selecionado e lembrado neste navegador: '+handle.name,'ok');
+  }catch(e){
+   if(e.name==='AbortError') return;
+   status(e.message||'Não foi possível acessar o arquivo.','error');
+   msg(e.message||'Falha ao selecionar o arquivo.',true);
+  }
+ });
+ $('reloadBtn').addEventListener('click',async()=>{
+  try{
+   if(!fileHandle) fileHandle=await getRememberedHandle();
+   if(!fileHandle){msg('Nenhum arquivo salvo neste navegador. Selecione o INI primeiro.',true);return;}
+   let permission=await fileHandle.queryPermission({mode:'readwrite'});
+   if(permission!=='granted') permission=await fileHandle.requestPermission({mode:'readwrite'});
+   if(permission!=='granted'){status('O navegador ainda não autorizou o acesso ao arquivo.','error');msg('Autorize o acesso para continuar.',true);return;}
+   await load();
+  }catch(e){msg('Erro ao recuperar o arquivo: '+e.message,true);}
+ });
+ $('default_boot_master_volume').addEventListener('input',()=>{$('volumeValue').textContent=$('default_boot_master_volume').value;});
+ // Recupera automaticamente o arquivo anteriormente selecionado neste navegador.
+ (async()=>{
+  try{
+   const savedHandle=await getRememberedHandle();
+   if(!savedHandle)return;
+   if(savedHandle.name.toLowerCase()!=='ersc_settings.ini')return;
+   fileHandle=savedHandle;
+   $('reloadBtn').disabled=false;
+   const permission=await fileHandle.queryPermission({mode:'readwrite'});
+   if(permission==='granted'){
+    await load();
+    status('Arquivo recuperado automaticamente: '+fileHandle.name,'ok');
+   }else{
+    status('Arquivo lembrado: '+fileHandle.name+'. Clique em “Recarregar arquivo” para autorizar o acesso.');
+    msg('O arquivo já está lembrado. Talvez o navegador peça autorização novamente.');
+   }
+  }catch(e){status('Não foi possível recuperar o arquivo salvo. Selecione-o novamente.','error');}
+ })();
+ $('showPassword').addEventListener('click',()=>{const el=$('cooppassword');const visible=el.type==='text';el.type=visible?'password':'text';$('showPassword').textContent=visible?'Mostrar':'Ocultar';});
+ $('saveBtn').addEventListener('click',async()=>{
+  if(!fileHandle)return;
+  const ext=$('save_file_extension').value.trim();
+  if(!/^[A-Za-z0-9]{1,120}$/.test(ext)){msg('A extensão do salvamento deve conter somente letras e números (até 120 caracteres).',true);$('save_file_extension').focus();return;}
+  const original=await (await fileHandle.getFile()).text();
+  const updates={}; for(const key of keys){const el=$(key);updates[key]=el.type==='checkbox'?(el.checked?'1':'0'):el.value.trim();}
+  let output=original; const seen=new Set();
+  output=output.split(/\r?\n/).map(line=>{
+   const m=line.match(/^(\s*)([A-Za-z0-9_]+)(\s*=\s*)(.*?)(\s*)$/); if(!m||!(m[2] in updates))return line;
+   const key=m[2]; seen.add(key); return m[1]+key+m[3]+updates[key]+m[5];
+  }).join('\r\n');
+  const missing=keys.filter(k=>!seen.has(k));
+  if(missing.length){if(output&&!output.endsWith('\r\n'))output+='\r\n';output+='\r\n[GAMEPLAY]\r\n';for(const k of missing)output+=k+' = '+updates[k]+'\r\n';}
+  try{const writable=await fileHandle.createWritable();await writable.write(output);await writable.close();msg('Configurações salvas com sucesso no ersc_settings.ini.');status('Arquivo atualizado: '+fileHandle.name,'ok');}
+  catch(e){msg('Não foi possível salvar. Verifique a permissão de gravação da pasta. '+e.message,true);}
+ });
+})();
+</script>
+</body>
+</html>
