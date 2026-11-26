@@ -91,9 +91,9 @@ Após uma instalação bem-sucedida, os arquivos temporários daquela versão s�
 - Expand-Archive
 
 
-⚙️ Configurador do Seamless Co-op
+##⚙️ Configurador do Seamless Co-op
 
-O projeto disponibiliza um configurador para editar o arquivo ersc_settings.ini, permitindo modificar as configurações do Seamless Co-op, incluindo a senha da sessão.
+#O projeto disponibiliza um configurador para editar o arquivo ersc_settings.ini, permitindo modificar as configurações do Seamless Co-op, incluindo a senha da sessão.
 
 📂 Localização do configurador
 
