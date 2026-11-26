@@ -17,7 +17,7 @@ $ApiUrl = "https://api.github.com/repos/$Repo/releases/latest"
 # Repositorio do atualizador e configurador
 $UpdaterRepo = "scotlion/seamless-coop-auto"
 
-$ConfiguratorUrl = "https://raw.githubusercontent.com/$UpdaterRepo/main/Configurador-SeamlessCoop.html"
+$ConfiguratorUrl = "https://raw.githubusercontent.com/$UpdaterRepo/main/Elden-Configurador-SeamlessCoop.html"
 
 # ============================================================
 # FUNCAO: INSTALAR CONFIGURADOR
