@@ -93,7 +93,7 @@ Após uma instalação bem-sucedida, os arquivos temporários daquela versão s�
 
 ## ⚙️ Configurador do Seamless Co-op
 
-#O projeto disponibiliza um configurador para editar o arquivo ersc_settings.ini, permitindo modificar as configurações do Seamless Co-op, incluindo a senha da sessão.
+# O projeto disponibiliza um configurador para editar o arquivo ersc_settings.ini, permitindo modificar as configurações do Seamless Co-op, incluindo a senha da sessão.
 
 📂 Localização do configurador
 
@@ -101,11 +101,11 @@ O configurador é baixado automaticamente para:
 
 C:\Users\usuario\AppData\Local\SeamlessCoopUpdater\Configurator\
 
-Após o download, um atalho é criado automaticamente na Área de Trabalho. Basta abrir o configurador pelo atalho.
+## Após o download, um atalho é criado automaticamente na Área de Trabalho. Basta abrir o configurador pelo atalho.
 
 ⚠️ Restrição ao selecionar o arquivo de configuração
 
-O configurador apresenta uma limitação ao tentar selecionar o arquivo ersc_settings.ini quando ele está localizado em pastas protegidas do Windows, como:
+## ⚠️ ⚠️ O configurador apresenta uma limitação ao tentar selecionar o arquivo ersc_settings.ini quando ele está localizado em pastas protegidas do Windows, como:
 
 C:\Program Files\
 C:\Program Files (x86)\
