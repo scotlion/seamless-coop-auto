@@ -27,7 +27,7 @@ function Install-SeamlessConfigurator {
 
     $ConfigDir = Join-Path $env:LOCALAPPDATA "SeamlessCoopUpdater\Configurator"
 
-    $ConfigPath = Join-Path $ConfigDir "Configurador-SeamlessCoop.html"
+    $ConfigPath = Join-Path $ConfigDir "Elden-Configurador-SeamlessCoop.html"
 
     $TempConfig = "$ConfigPath.download"
 
